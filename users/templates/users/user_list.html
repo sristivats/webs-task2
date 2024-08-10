@@ -1,0 +1,140 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Dashboard</title>
+    <link rel="stylesheet" href="{% static 'users/css/alcher1.css' %}">
+</head>
+<body>
+    <header class="header">
+        <nav>
+            <ul>
+                <li><a href="#">Home</a></li>
+                <li><a href="#">Profile</a></li>
+                <li><a href="#">Settings</a></li>
+                <li><a href="#">Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+    
+    <div class="sidebar" id="sidebar">
+        <ul>
+            <li class="new"><a href="#" style="font-size: 30px; background-color: rgb(107, 146, 180);padding: 10px; border-radius: 20px;"> + New Item</a></li>
+            <li class="dropdown">
+                <a href="#" class="dropdown-btn">Dashboard</a>
+                <div class="dropdown-content">
+                    <a href="#">Commerce</a>
+                    <a href="#">Analytics</a>
+                    <a href="#">Crypto</a>
+                    <a href="#">Helpdesk</a>
+                    <a href="#">Monitoring</a>
+                    <a href="#">Fitness</a>
+                </div>
+            </li>
+            <li class="dropdown">
+                <a href="#" class="dropdown-btn">Application</a>
+                <div class="dropdown-content">
+                    <a href="#">Data Validation</a>
+                    <a href="#">ID Enquiry</a>
+                    <a href="#">Update Info</a>
+                </div>
+            </li>
+            <li class="dropdown">
+                <a href="#" class="dropdown-btn">Elements</a>
+                <div class="dropdown-content">
+                    <a href="#">New Form</a>
+                    <a href="#">Change details</a>
+                    <a href="#">Track Status</a>
+                </div>
+            </li>
+        </ul>
+    </div>
+
+    <div id="content">
+        <button id="toggle-btn">☰</button>
+        <h1>Welcome</h1>
+        <h1>Username</h1>
+        <h3>Form Title</h3>
+        <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Veniam ab voluptate minus facilis expedita eum in tempora officiis obcaecati similique quae, suscipit modi ea enim quos repellat tenetur odit vel?</p>
+        <table>
+            <thead>
+                <tr>
+                    
+                    <th>Name</th>
+                    <th>Username</th>
+                    <th>Email</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="userdata">
+                {% for user in users %}
+                <tr>
+                    
+                    <td>{{ user.name }}</td>
+                    <td>{{ user.username }}</td>
+                    <td>{{ user.email }}</td>
+                    <td>
+                        <button class="action-btn edit-btn" onclick="openEditModal('{{ user.id }}', '{{ user.name }}', '{{ user.username }}', '{{ user.email }}')">Edit</button>
+                        <form method="POST" action="{% url 'delete_user' user.id %}" style="display:inline;">
+                            {% csrf_token %}
+                            <button type="submit" class="action-btn delete-btn">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <button id="add-user-btn">Add User</button>
+    </div>
+    
+    <div id="add-user-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeAddModal()">&times;</span>
+            <h2>Add User</h2>
+            <form id="add-user-form" method="POST" action="{% url 'add_user' %}">
+                {% csrf_token %}
+                <label for="add-name">Name:</label>
+                <input type="text" id="add-name" name="name" required>
+                <label for="add-username">Username:</label>
+                <input type="text" id="add-username" name="username" required>
+                <label for="add-email">Email:</label>
+                <input type="email" id="add-email" name="email" required>
+                <button type="submit">Add User</button>
+            </form>
+        </div>
+    </div>
+
+   
+    <div id="edit-user-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeEditModal()">&times;</span>
+            <h2>Edit User</h2>
+            <form id="edit-user-form" method="POST">
+                {% csrf_token %}
+                <input type="hidden" id="edit-user-id" name="user_id">
+                <label for="edit-name">Name:</label>
+                <input type="text" id="edit-name" name="name" required>
+                <label for="edit-username">Username:</label>
+                <input type="text" id="edit-username" name="username" required>
+                <label for="edit-email">Email:</label>
+                <input type="email" id="edit-email" name="email" required>
+                <button type="submit">Save Changes</button>
+            </form>
+        </div>
+    </div>
+    
+
+    <script src="{% static 'users/js/alcher1.js' %}"></script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
